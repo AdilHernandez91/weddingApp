@@ -21,9 +21,15 @@ const HomeStack = createStackNavigator({
   },
 });
 
+const AccommodationStack = createStackNavigator({
+  Accommodations: AccommodationScreen,
+}, {
+  initialRouteName: 'Accommodations',
+});
+
 const TabNavigator = createBottomTabNavigator({
   Home: HomeStack,
-  Accommodations: AccommodationScreen,
+  Accommodations: AccommodationStack,
   CreateInvitation: CreateInvitationScreen,
 }, {
   initialRouteName: 'Home',
