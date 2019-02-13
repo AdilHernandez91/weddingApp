@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 
 import LandingImage from './../components/home/LandingImage';
 
@@ -9,6 +8,10 @@ import InvitationImage from './../assets/invitation.jpg';
 import ProposalImage from './../assets/proposal.jpg';
 
 class HomeScreen extends Component {
+  static navigationOptions = {
+    header: null,
+  };
+
   handleNavigation = path => {
     this.props.navigation.navigate(path);
   };
@@ -19,6 +22,8 @@ class HomeScreen extends Component {
         <LandingImage
           title="We're getting married"
           caption="31/08/2019"
+          onNavigate={this.handleNavigation}
+          pathTo={'Accommodation'}
           image={LandingImg} />
         <LandingImage
           title="About the event"

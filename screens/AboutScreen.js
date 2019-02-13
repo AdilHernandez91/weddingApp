@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { MapView, Permissions } from 'expo';
+import { MapView } from 'expo';
 import { ListItem } from 'react-native-elements';
 
 import { regionFrom } from '../utils/address';
@@ -13,11 +13,10 @@ class AboutScreen extends Component {
   };
 
   static navigationOptions = {
-    headerTitle: 'About'
+    headerTitle: 'About',
   };
 
-  async componentDidMount() {
-    await Permissions.askAsync(Permissions.LOCATION);
+  componentDidMount() {
     this.setState({ isLoading: false });
   }
 

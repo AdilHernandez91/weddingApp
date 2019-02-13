@@ -3,13 +3,20 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet, Text, Button } from 'react-native';
 import { Card } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
+
 import { STYLES } from '../../constants';
+
 
 const propTypes = {
   accommodation: PropTypes.shape({
+    _id: PropTypes.string,
     name: PropTypes.string,
     isRecommended: PropTypes.bool,
+    address: PropTypes.string,
+    phone: PropTypes.string,
+    distance: PropTypes.number,
   }).isRequired,
+  handleSelect: PropTypes.func.isRequired,
 };
 
 const renderRecommended = isRecommended => {
@@ -20,7 +27,8 @@ const renderRecommended = isRecommended => {
   }
 };
 
-const CardItem = ({ accommodation }) => {
+
+const CardItem = ({ accommodation, handleSelect }) => {
   return (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.cardHeader}>
@@ -29,13 +37,15 @@ const CardItem = ({ accommodation }) => {
       </View>
 
       <View style={styles.cardBody}>
-        <View style={styles.cardPriceContainer}>
-          <Text style={styles.cardPrice}>Price: {accommodation.distance} €</Text>
-        </View>
+        <Text>Address: {accommodation.address}</Text>
+        <Text>Phone: {accommodation.phone}</Text>
       </View>
 
       <View style={styles.cardButtonContainer}>
-        <Button title={'View More'} color={STYLES.COLORS.RED} onPress={() => {}}/>
+        <Button
+          title={'View More'}
+          color={STYLES.COLORS.RED}
+          onPress={() => handleSelect(accommodation)}/>
       </View>
     </Card>
   );
@@ -54,10 +64,11 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 20,
   },
   cardBody: {
-    paddingTop: 15,
+    paddingTop: 20,
+    paddingBottom: 15,
   },
   cardPriceContainer: {
     backgroundColor: STYLES.COLORS.RED,
@@ -72,7 +83,8 @@ const styles = StyleSheet.create({
   },
   cardButtonContainer: {
     bottom: 0,
-    alignSelf: 'flex-end'
+    paddingTop: 20,
+    alignSelf: 'flex-end',
   },
 });
 

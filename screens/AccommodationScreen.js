@@ -1,42 +1,34 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { SearchBar } from 'react-native-elements';
+import { View, StyleSheet, ScrollView, TouchableNativeFeedback } from 'react-native';
+import { Header, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import Filters from '../components/accommodations/Filters';
 import { getAccommodations } from '../store/actions';
 import CardItem from '../components/accommodations/CardItem';
 import Loading from '../components/Loading';
+import { STYLES } from '../constants';
+import { Ionicons } from '@expo/vector-icons';
+import AccommodationDetail from '../components/accommodations/AccommodationDetail';
 
 class AccommodationScreen extends Component {
   state = {
     search: '',
     modalVisible: false,
     isLoading: false,
+    accommodation: null,
   };
+
 
   static propTypes = {
     accommodations: PropTypes.array.isRequired,
     getAccommodations: PropTypes.func.isRequired,
   };
 
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
-
-    return {
-      headerRight: (
-        <TouchableOpacity onPress={() => params.handleModal()}>
-          <Ionicons name={'md-options'} size={28} style={{ paddingRight: 15 }} />
-        </TouchableOpacity>
-      ),
-    }
-  };
-
   componentDidMount() {
     this.props.navigation.setParams({
-      handleModal: this.openModal,
+      handleModal: this.toggleModal,
     });
     this.props.getAccommodations((status) => {
       this.setState({ isLoading: status });
@@ -47,28 +39,50 @@ class AccommodationScreen extends Component {
     this.setState({ search });
   };
 
-  openModal = () => {
-    this.setState({ modalVisible: true });
+  toggleModal = () => {
+    this.setState({ modalVisible: !this.state.modalVisible });
   };
 
-  closeModal = () => {
-    this.setState({ modalVisible: false });
+  onItemSelected = accommodation => {
+    this.setState({ accommodation });
+  };
+
+  closeItemModal = () => {
+    this.setState({ accommodation: null });
   };
 
   renderAccommodations = () => {
     return this.props.accommodations.map((accommodation, key) => {
-      return <CardItem key={key} accommodation={accommodation} />;
+      return (
+        <CardItem
+          key={key}
+          handleSelect={this.onItemSelected}
+          accommodation={accommodation} />
+      );
     });
   };
 
   render() {
-    const { search, modalVisible } = this.state;
+    const { search, modalVisible, accommodation } = this.state;
 
     if (this.state.isLoading)
       return <Loading />;
 
     return (
       <View style={styles.container}>
+        <Filters isVisible={modalVisible} onClose={this.toggleModal}/>
+        <AccommodationDetail accommodation={accommodation} onClose={this.closeItemModal}/>
+
+        <Header
+          containerStyle={styles.headerBar}
+          centerComponent={{ text: 'Filter Accommodations' }}
+          rightComponent={
+            <TouchableNativeFeedback onPress={this.toggleModal}>
+              <Ionicons name={'md-options'} size={28} />
+            </TouchableNativeFeedback>
+          }
+        />
+
         <SearchBar
           placeholder="Type Here..."
           platform={'android'}
@@ -77,8 +91,8 @@ class AccommodationScreen extends Component {
           onChangeText={this.onSearchChange}
           value={search}
         />
-        <Filters isVisible={modalVisible} onClose={this.closeModal}/>
-        <ScrollView>
+
+        <ScrollView style={styles.cardListContainer}>
           {this.renderAccommodations()}
         </ScrollView>
       </View>
@@ -91,8 +105,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchBar: {
-    elevation: 5,
+    elevation: 3,
   },
+  headerBar: {
+    backgroundColor: STYLES.COLORS.WHITE,
+    elevation: 8,
+    height: 56,
+    paddingBottom: 25,
+  },
+  cardListContainer: {
+    marginBottom: 10,
+  }
 });
 
 const mapStateToProps = state => {
