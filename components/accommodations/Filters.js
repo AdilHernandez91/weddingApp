@@ -107,8 +107,7 @@ class Filters extends Component {
                 }}
                 value={this.state.recommended}
                 thumbColor={STYLES.COLORS.LIGHT}
-                onValueChange={recommended => this.setState({ recommended })}
-                style={styles.switch} />
+                onValueChange={recommended => this.setState({ recommended })} />
             </View>
           </ScrollView>
 
@@ -154,9 +153,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  switch: {
-
-  }
 });
 
 export default Filters;

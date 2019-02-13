@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Button, ScrollView } from 'react-native';
 import { MailComposer, Constants } from 'expo';
 import { Input } from 'react-native-elements';
-import { AntDesign } from '@expo/vector-icons';
 
 import { STYLES } from '../constants';
 
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 20,
-  }
+  },
 });
 
 export default ContactScreen;
